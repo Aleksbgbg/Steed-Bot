@@ -5,8 +5,6 @@
 
     internal class Command
     {
-        internal string CommandString { get; }
-
         private readonly string description;
 
         private readonly Regex regex;
@@ -17,6 +15,8 @@
             this.description = description;
             this.regex = new Regex(regex, RegexOptions.Compiled);
         }
+
+        internal string CommandString { get; }
 
         internal string HelpText => $"**{CommandString}:**\n- {description}";
 

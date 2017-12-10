@@ -58,7 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Commands\Commands.txt" />
+    <EmbeddedResource Include="Commands\Commands.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Change Log.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
