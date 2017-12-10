@@ -37,11 +37,13 @@
 
                     var matchedCommand = commands.Select((command, index) => new { Command = command, Index = index }).FirstOrDefault(command => command.Command.IsMatch(e.Message.Content));
 
+                    async Task Respond(string message) => await e.Message.RespondAsync(string.Join("\n", e.Author.Mention, message));
+
                     if (matchedCommand == null)
                     {
                         var closestMatch = commands.Select(command => new { Command = command, Distance = command.ComputeLevensteinDistance(e.Message.Content) }).OrderBy(command => command.Distance).First();
 
-                        await e.Message.RespondAsync(closestMatch.Distance <= 5 ? $"{e.Author.Mention}\nInvalid command.\nClosest match:\n{closestMatch.Command.HelpText}" : $"{e.Author.Mention}\nInvalid command.");
+                        await Respond(closestMatch.Distance <= 5 ? $"Invalid command.\nClosest match:\n{closestMatch.Command.HelpText}" : "Invalid command.");
 
                         return;
                     }
@@ -49,11 +51,15 @@
                     switch (matchedCommand.Index)
                     {
                         case 0: // help
-                            await e.Message.RespondAsync($"{e.Author.Mention}\n**Commands:**\n{string.Join("\n\n", commands.Select(command => command.HelpText))}");
+                            await Respond($"**Commands:**\n{string.Join("\n\n", commands.Select(command => command.HelpText))}");
                             break;
 
                         case 1: // changelog
-                            await e.Message.RespondAsync($"{e.Author.Mention}\n**Change Log:**\n{WebClient.DownloadString("http://steedservers.000webhostapp.com/steedbuild/updatelog.txt")}");
+                            await Respond($"**Change Log:**\n{WebClient.DownloadString("http://steedservers.000webhostapp.com/steedbuild/updatelog.txt")}");
+                            break;
+
+                        default: // Commands mentioned in the 'Commands.txt' file which do not have an associated action
+                            await Respond("The command you invoked is not yet supported by Steed Bot.");
                             break;
                     }
                 };
