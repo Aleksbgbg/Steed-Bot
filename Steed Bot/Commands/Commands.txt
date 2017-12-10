@@ -1,0 +1,3 @@
+﻿!changelog
+^!changelog$
+Downloads and outputs a message containing the latest changelog file available on the Steed servers.
