@@ -48,6 +48,10 @@
 
                 switch (matchedCommand.CommandString)
                 {
+                    case "!help":
+                        await e.Message.RespondAsync($"{e.Author.Mention}\n**Commands:**\n{string.Join("\n\n", commands.Select(command => command.HelpText))}");
+                        break;
+
                     case "!changelog":
                         await e.Message.RespondAsync($"{e.Author.Mention}\n**Change Log:**\n{WebClient.DownloadString("http://steedservers.000webhostapp.com/steedbuild/updatelog.txt")}");
                         break;
