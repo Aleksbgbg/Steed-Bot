@@ -17,7 +17,7 @@
         private static void Main() => Task.Run(async () =>
         {
             {
-                Command[] commands = Regex.Matches(AcquireResourceFile("Steed.Bot.Commands.Commands.txt").Replace("\r", string.Empty), "(?<Command>!.+)\n(?<Regex>.+)\n(?<Description>.+)").Cast<Match>().Select(match => new Command(match.Groups["Command"].Value, match.Groups["Regex"].Value, match.Groups["Description"].Value)).ToArray();
+                Command[] commands = Regex.Matches(AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>!.+)\n(?<Regex>.+)\n(?<Description>.+)").Cast<Match>().Select(match => new Command(match.Groups["Command"].Value, match.Groups["Regex"].Value, match.Groups["Description"].Value)).ToArray();
 
                 // Token retrieved from static TokenRetriever class to prevent token theft (TokenRetriever will not be available on GitHub)
                 DiscordClient discordClient = new DiscordClient(new DiscordConfiguration { AutoReconnect = true, Token = TokenRetriever.RetrieveToken() });
@@ -68,7 +68,7 @@
         private static string AcquireResourceFile(string filename)
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            using (StreamReader streamReader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(filename))) return streamReader.ReadToEnd();
+            using (StreamReader streamReader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(filename))) return streamReader.ReadToEnd().Replace("\r", string.Empty);
         }
     }
 }
