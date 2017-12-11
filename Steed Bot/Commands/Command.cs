@@ -23,7 +23,7 @@
 
         internal string HelpText => $"`{CommandString}`: {description}\nSyntax:```{syntax}```";
 
-        internal bool IsMatch(string text) => regex.IsMatch(text);
+        internal Match Match(string text) => regex.Match(text);
 
         internal int ComputeLevensteinDistance(string source)
         {
