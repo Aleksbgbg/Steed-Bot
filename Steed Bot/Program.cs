@@ -10,6 +10,7 @@
     using Commands;
     using DSharpPlus;
     using Token;
+    using static System.Console;
 
     internal static class Program
     {
@@ -58,20 +59,23 @@
                             break;
 
                         case 1: // steed
-                            switch (matchedCommand.Match.Groups["Parameter"].Value)
+                            for (int index = 1; index < 4; ++index)
                             {
-                                case "changelog":
-                                    await RespondAsync($"**Change Log:**\n{WebClient.DownloadString($"{BaseSteedServerUrl}/updatelog.txt")}");
-                                    break;
+                                switch (matchedCommand.Match.Groups[index].Value)
+                                {
+                                    case "changelog":
+                                        await RespondAsync($"**Change Log:**\n{WebClient.DownloadString($"{BaseSteedServerUrl}/updatelog.txt")}");
+                                        break;
 
-                                case "version":
-                                    // Arbitrarily inserting spaces between the DateTime string downloaded from steedservers in order to be parsed correctly - might break in the future
-                                    await RespondAsync($"The latest Steed version was released on {DateTime.Parse(WebClient.DownloadString($"{BaseSteedServerUrl}/version.txt").Insert(2, " ").Insert(5, " ")).ToLongDateString()}.");
-                                    break;
+                                    case "version":
+                                        // Arbitrarily inserting spaces between the DateTime string downloaded from steedservers in order to be parsed correctly - might break in the future
+                                        await RespondAsync($"The latest Steed version was released on {DateTime.Parse(WebClient.DownloadString($"{BaseSteedServerUrl}/version.txt").Insert(2, " ").Insert(5, " ")).ToLongDateString()}.");
+                                        break;
 
-                                case "update":
-                                    await e.Message.RespondWithFileAsync(WebRequest.Create($"{BaseSteedServerUrl}/steedapp.zip").GetResponse().GetResponseStream(), "steedapp.zip", e.Author.Mention);
-                                    break;
+                                    case "update":
+                                        await e.Message.RespondWithFileAsync(WebRequest.Create($"{BaseSteedServerUrl}/steedapp.zip").GetResponse().GetResponseStream(), "steedapp.zip", e.Author.Mention);
+                                        break;
+                                }
                             }
                             break;
 
