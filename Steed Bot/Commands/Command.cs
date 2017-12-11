@@ -5,20 +5,23 @@
 
     internal class Command
     {
+        private readonly string syntax;
+
         private readonly string description;
 
         private readonly Regex regex;
 
-        internal Command(string commandString, string regex, string description)
+        internal Command(string commandString, string syntax, string regex, string description)
         {
             CommandString = commandString;
+            this.syntax = syntax;
             this.description = description;
             this.regex = new Regex(regex, RegexOptions.Compiled);
         }
 
         internal string CommandString { get; }
 
-        internal string HelpText => $"**{CommandString}:**\n- {description}";
+        internal string HelpText => $"`{CommandString}`: {description}\nSyntax:```{syntax}```";
 
         internal bool IsMatch(string text) => regex.IsMatch(text);
 
