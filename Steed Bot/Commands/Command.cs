@@ -5,51 +5,56 @@
 
     internal class Command
     {
+        private readonly string commandString;
+
         private readonly string syntax;
 
         private readonly string description;
 
         private readonly Regex regex;
 
-        internal Command(string commandString, string syntax, string regex, string description)
+        internal Command(string commandString, string syntax, string description, string regex)
         {
-            CommandString = commandString;
+            this.commandString = commandString;
             this.syntax = syntax;
             this.description = description;
             this.regex = new Regex(regex, RegexOptions.Compiled);
         }
 
-        internal string CommandString { get; }
-
-        internal string HelpText => $"`{CommandString}`: {description}\nSyntax:```{syntax}```";
+        internal string HelpText => $"`{commandString}`: {description}\nSyntax:```{syntax}```";
 
         internal Match Match(string text) => regex.Match(text);
 
         internal int ComputeLevensteinDistance(string source)
         {
-            int[,] distances = new int[source.Length + 1, CommandString.Length + 1];
+            int[,] distances = new int[source.Length + 1, commandString.Length + 1];
 
-            if (source.Length == 0) return CommandString.Length;
+            if (source.Length == 0) return commandString.Length;
 
-            if (CommandString.Length == 0) return source.Length;
+            if (commandString.Length == 0) return source.Length;
 
             for (int column = -1; column < source.Length; distances[++column, 0] = column)
             {
             }
 
-            for (int row = -1; row < CommandString.Length; distances[0, ++row] = row)
+            for (int row = -1; row < commandString.Length; distances[0, ++row] = row)
             {
             }
 
-            for (int column = 1; column <= source.Length; column++)
-                for (int row = 1; row <= CommandString.Length; row++)
+            for (int column = 1; column <= source.Length; ++column)
+                for (int row = 1; row <= commandString.Length; ++row)
                 {
-                    int previousColumn = column - 1, previousRow = row - 1;
+                    int previousColumn = column - 1;
+                    int previousRow = row - 1;
 
-                    distances[column, row] = Math.Min(Math.Min(distances[previousColumn, row] + 1, distances[column, previousRow] + 1), distances[previousColumn, previousRow] + (CommandString[previousRow] == source[previousColumn] ? 0 : 1));
+                    distances[column, row] = Math.Min(Math.Min(
+                        distances[previousColumn, row] + 1,
+                        distances[column, previousRow] + 1),
+                        distances[previousColumn, previousRow] + (commandString[previousRow] == source[previousColumn] ? 0 : 1)
+                        );
                 }
 
-            return distances[source.Length, CommandString.Length];
+            return distances[source.Length, commandString.Length];
         }
     }
 }

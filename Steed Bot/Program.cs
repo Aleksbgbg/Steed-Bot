@@ -10,7 +10,6 @@
     using Commands;
     using DSharpPlus;
     using Token;
-    using static System.Console;
 
     internal static class Program
     {
@@ -18,14 +17,13 @@
 
         private static readonly WebClient WebClient = new WebClient();
 
-        private static readonly Command[] Commands = Regex.Matches(AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>.+)\n(?<Syntax>!.+)\n(?<Regex>.+)\n(?<Description>.+)").Cast<Match>().Select(match => new Command(match.Groups["Command"].Value, match.Groups["Syntax"].Value, match.Groups["Regex"].Value, match.Groups["Description"].Value)).ToArray();
+        private static readonly Command[] Commands = Regex.Matches(AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>.+)\n(?<Syntax>!.+)\n(?<Regex>.+)\n(?<Description>.+)").Cast<Match>().Select(match => new Command(match.Groups["Command"].Value, match.Groups["Syntax"].Value, match.Groups["Description"].Value, match.Groups["Regex"].Value)).ToArray();
 
-        private static void Main() => Task.Run(async () =>
+        private static async Task Main()
         {
             {
                 // Token retrieved from static TokenRetriever class to prevent token theft (TokenRetriever will not be available on GitHub)
-                DiscordClient discordClient = new DiscordClient(new DiscordConfiguration { AutoReconnect = true, Token = TokenRetriever.RetrieveToken() });
-
+                DiscordClient discordClient = new DiscordClient(new DiscordConfiguration { Token = TokenRetriever.RetrieveToken() });
                 await discordClient.ConnectAsync();
 
                 // Not required at the moment
@@ -87,7 +85,7 @@
             }
 
             await Task.Delay(-1);
-        }).GetAwaiter().GetResult();
+        }
 
         // Not required at the moment
         // private static string AcquireResourceFile(string fileNamespace, string filename) => AcquireResourceFile(string.Concat(fileNamespace, filename));
