@@ -17,6 +17,8 @@
 
         private static readonly WebClient WebClient = new WebClient();
 
+        private static readonly Random Random = new Random();
+
         private static readonly Command[] Commands = Regex.Matches(
             AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>.+)\n(?<Syntax>!.+)\n(?<Regex>.+)\n(?<Description>.+)"
             )
@@ -40,7 +42,7 @@
 
                     if (matchedCommand == null)
                     {
-                        var closestMatch = Commands.Select(command => new { Command = command, Distance = command.ComputeLevensteinDistance(e.Message.Content) }).OrderBy(command => command.Distance).First();
+                        var closestMatch = Commands.Select(command => new { Command = command, Distance = command.ComputeLevensteinDistance(e.Message.Content.Split().First().TrimStart('!')) }).OrderBy(command => command.Distance).First();
 
                         await RespondAsync(closestMatch.Distance <= 3 ? $"Invalid syntax.\nClosest match:\n{closestMatch.Command.HelpText}" : "Invalid syntax. Type `!help` for a syntax prompt.");
 
@@ -56,17 +58,25 @@
                             break;
 
                         case 1: // steed
-                            for (int index = 1; index < 5; ++index)
+                            string[] matchGroups = matchedCommand.Match.Groups.Cast<Group>().Skip(1).Select(group => group.ToString()).ToArray();
+
+                            if (matchGroups.All(match => match == string.Empty)) // Match is '!steed'
                             {
-                                switch (matchedCommand.Match.Groups[index].Value)
+                                await RespondAsync(Random.Next(2) == 1 ? "Steed Bot is online." : "Yes?");
+                                return;
+                            }
+
+                            foreach (string match in matchGroups)
+                            {
+                                switch (match)
                                 {
                                     case "changelog":
                                         await RespondAsync($"**Change Log:**\n{WebClient.DownloadString($"{BaseSteedServerUrl}/updatelog.txt")}");
                                         break;
 
                                     case "version":
-                                        // Arbitrarily inserting spaces between the DateTime string downloaded from steedservers in order to be parsed correctly - might break in the future
-                                        await RespondAsync($"The latest Steed version was released on {DateTime.Parse(WebClient.DownloadString($"{BaseSteedServerUrl}/version.txt").Insert(2, " ").Insert(5, " ")).ToLongDateString()}.");
+                                        // Arbitrarily formatting the DateTime string downloaded from steedservers in order to be parsed correctly - most likely will break (again) in the future
+                                        await RespondAsync($"The latest Steed version was released on {DateTime.Parse(string.Concat(WebClient.DownloadString($"{BaseSteedServerUrl}/version.txt").Insert(2, " ").Insert(5, " ").TakeWhile(character => character != '#'))).ToLongDateString()}.");
                                         break;
 
                                     case "update":
