@@ -17,21 +17,18 @@
 
         private static readonly WebClient WebClient = new WebClient();
 
-        private static readonly Command[] Commands = Regex.Matches(AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>.+)\n(?<Syntax>!.+)\n(?<Regex>.+)\n(?<Description>.+)").Cast<Match>().Select(match => new Command(match.Groups["Command"].Value, match.Groups["Syntax"].Value, match.Groups["Description"].Value, match.Groups["Regex"].Value)).ToArray();
+        private static readonly Command[] Commands = Regex.Matches(
+            AcquireResourceFile("Steed.Bot.Commands.Commands.txt"), "(?<Command>.+)\n(?<Syntax>!.+)\n(?<Regex>.+)\n(?<Description>.+)"
+            )
+            .Cast<Match>()
+            .Select(match => new Command(match.Groups["Command"].Value, match.Groups["Syntax"].Value, match.Groups["Description"].Value, match.Groups["Regex"].Value))
+            .ToArray();
 
         private static async Task Main()
         {
             {
                 // Token retrieved from static TokenRetriever class to prevent token theft (TokenRetriever will not be available on GitHub)
                 DiscordClient discordClient = new DiscordClient(new DiscordConfiguration { Token = TokenRetriever.RetrieveToken() });
-                await discordClient.ConnectAsync();
-
-                // Not required at the moment
-                //
-                // DiscordGuild steedGuild = await discordClient.GetGuildAsync(389407914366074901);
-                //
-                // Dictionary<string, DiscordMember> members = (await steedGuild.GetAllMembersAsync()).ToDictionary(member => member.Username, member => member);
-                // Dictionary<string, DiscordChannel> channels = (await steedGuild.GetChannelsAsync()).ToDictionary(channel => channel.Name, channel => channel);
 
                 discordClient.MessageCreated += async e =>
                 {
@@ -50,6 +47,8 @@
                         return;
                     }
 
+                    async Task RespondWithFileAsync(string filename) => await e.Message.RespondWithFileAsync(WebRequest.Create($"{BaseSteedServerUrl}/{filename}").GetResponse().GetResponseStream(), filename, e.Author.Mention);
+
                     switch (matchedCommand.Index)
                     {
                         case 0: // help
@@ -57,7 +56,7 @@
                             break;
 
                         case 1: // steed
-                            for (int index = 1; index < 4; ++index)
+                            for (int index = 1; index < 5; ++index)
                             {
                                 switch (matchedCommand.Match.Groups[index].Value)
                                 {
@@ -71,7 +70,11 @@
                                         break;
 
                                     case "update":
-                                        await e.Message.RespondWithFileAsync(WebRequest.Create($"{BaseSteedServerUrl}/steedapp.zip").GetResponse().GetResponseStream(), "steedapp.zip", e.Author.Mention);
+                                        await RespondWithFileAsync("steedapp.zip");
+                                        break;
+
+                                    case "screenshot":
+                                        await RespondWithFileAsync("screenshot.png");
                                         break;
                                 }
                             }
@@ -82,13 +85,12 @@
                             break;
                     }
                 };
+
+                await discordClient.ConnectAsync();
             }
 
             await Task.Delay(-1);
         }
-
-        // Not required at the moment
-        // private static string AcquireResourceFile(string fileNamespace, string filename) => AcquireResourceFile(string.Concat(fileNamespace, filename));
 
         private static string AcquireResourceFile(string filename)
         {

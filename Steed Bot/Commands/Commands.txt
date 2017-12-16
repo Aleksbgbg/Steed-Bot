@@ -4,6 +4,6 @@
 Outputs a list of command queries supported by Steed Bot.
 
 steed
-!steed [changelog] [version] [update]
-^!steed(?: (changelog)| (version)| (update)){1,3}$
-Downloads and outputs a message containing the latest changelog file; Steed release date; or Steed update available on the Steed servers, as specified. At least one parameter must be specified.
+!steed [changelog] [version] [update] [screenshot]
+^!steed(?: (changelog)| (version)| (update)| (screenshot)){1,4}$
+Downloads and outputs a message containing the latest Steed changelog file; release date; update; or screenshot available on the Steed servers, as specified. At least one parameter must be provided.
