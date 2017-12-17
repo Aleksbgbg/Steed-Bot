@@ -9,11 +9,11 @@
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Timers;
-    using Commands;
     using DSharpPlus;
     using DSharpPlus.Entities;
     using DSharpPlus.EventArgs;
-    using Token;
+    using Steed.Bot.Commands;
+    using Steed.Bot.Token;
 
     internal static class Program
     {
