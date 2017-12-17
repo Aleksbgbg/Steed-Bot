@@ -3,7 +3,7 @@
     using System;
     using System.Text.RegularExpressions;
 
-    internal class Command
+    internal class Command : BaseCommand
     {
         private readonly string commandString;
 
@@ -11,19 +11,16 @@
 
         private readonly string description;
 
-        private readonly Regex regex;
-
-        internal Command(string commandString, string syntax, string description, string regex)
+        internal Command(string commandString, string syntax, string description, string regex) : base(regex)
         {
             this.commandString = commandString;
             this.syntax = syntax;
             this.description = description;
-            this.regex = new Regex(regex, RegexOptions.Compiled);
         }
 
         internal string HelpText => $"`{commandString}`: {description}\nSyntax:```{syntax}```";
 
-        internal Match Match(string text) => regex.Match(text);
+        internal Match Match(string command) => regex.Match(command);
 
         internal int ComputeLevensteinDistance(string source)
         {
