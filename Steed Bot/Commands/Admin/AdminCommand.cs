@@ -1,4 +1,4 @@
-﻿namespace Steed.Bot.Commands.Admin
+﻿namespace SteedBot.Commands.Admin
 {
     internal class AdminCommand : BaseCommand
     {

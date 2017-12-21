@@ -1,4 +1,4 @@
-﻿namespace Steed.Bot.Commands.Admin
+﻿namespace SteedBot.Commands.Admin
 {
     using System.Threading.Tasks;
 

@@ -1,4 +1,4 @@
-﻿namespace Steed.Bot.Bot
+﻿namespace SteedBot.Bot
 {
     using System;
 #if DEBUG
@@ -15,10 +15,10 @@
     using DSharpPlus.Entities;
     using DSharpPlus.EventArgs;
 
-    using Steed.Bot.Commands;
-    using Steed.Bot.Commands.Admin;
+    using SteedBot.Commands;
+    using SteedBot.Commands.Admin;
 
-    internal class SteedBot
+    internal class Steed
     {
         private const string SteedServerUrl = "http://steedservers.000webhostapp.com/steedbuild";
 
@@ -32,7 +32,7 @@
 
         private ulong[] adminIds;
 
-        internal SteedBot(string token, string commands, string adminCommands)
+        internal Steed(string token, string commands, string adminCommands)
         {
             DiscordClient = new DiscordClient(new DiscordConfiguration { Token = token });
 

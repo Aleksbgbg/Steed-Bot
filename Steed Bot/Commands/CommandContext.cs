@@ -1,4 +1,4 @@
-﻿namespace Steed.Bot.Commands
+﻿namespace SteedBot.Commands
 {
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
@@ -6,18 +6,18 @@
     using DSharpPlus;
     using DSharpPlus.Entities;
 
-    using Steed.Bot.Bot;
+    using SteedBot.Bot;
 
     internal class CommandContext
     {
-        internal CommandContext(SteedBot bot, DiscordMessage message, Match match)
+        internal CommandContext(Steed bot, DiscordMessage message, Match match)
         {
             Bot = bot;
             Message = message;
             Match = match;
         }
 
-        internal SteedBot Bot { get; }
+        internal Steed Bot { get; }
 
         internal DiscordMessage Message { get; }
 

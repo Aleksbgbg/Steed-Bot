@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{43FC5B44-F018-4BB5-AF98-8FF4B0D43C26}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Steed.Bot</RootNamespace>
+    <RootNamespace>SteedBot</RootNamespace>
     <AssemblyName>Steed Bot</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,7 +45,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bot\SteedBot.cs" />
+    <Compile Include="Bot\Steed.cs" />
     <Compile Include="Commands\Admin\AdminCommand.cs" />
     <Compile Include="Commands\Admin\AdminCommandActions.cs" />
     <Compile Include="Commands\BaseCommand.cs" />

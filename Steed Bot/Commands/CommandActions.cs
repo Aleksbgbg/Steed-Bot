@@ -1,4 +1,4 @@
-﻿namespace Steed.Bot.Commands
+﻿namespace SteedBot.Commands
 {
     using System;
     using System.Linq;
